@@ -43,11 +43,27 @@ export function currentPeriodKey() {
 export function unwrapList<T>(data: PaginatedResponse<T> | T[] | undefined): {
   items: T[];
   total: number;
+  page?: number;
+  limit?: number;
+  totalPages?: number;
 } {
   if (!data) return { items: [], total: 0 };
   if (Array.isArray(data)) return { items: data, total: data.length };
   return {
     items: data.items ?? [],
     total: data.total ?? data.items?.length ?? 0,
+    page: data.page,
+    limit: data.limit,
+    totalPages: data.totalPages,
   };
+}
+
+export function formatPhone(
+  phone?: string,
+  countryCode?: string,
+  contactNo?: string
+) {
+  const number = phone ?? contactNo;
+  if (!number) return "—";
+  return countryCode ? `${countryCode} ${number}` : number;
 }

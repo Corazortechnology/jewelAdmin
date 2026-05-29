@@ -5,7 +5,7 @@ import MlmPageBreadCrumb from "./components/MlmPageBreadCrumb";
 import Button from "../../../components/ui/button/Button";
 import Alert from "../../../components/ui/alert/Alert";
 import { mlmMemberApi, type MlmMember } from "../../../services/mlm";
-import { formatCurrency, formatDate, formatDateTime } from "./utils";
+import { formatCurrency, formatDate, formatDateTime, formatPhone } from "./utils";
 import { MemberStatusBadge } from "./components/StatusBadges";
 
 function InfoRow({ label, value }: { label: string; value?: React.ReactNode }) {
@@ -97,14 +97,14 @@ export default function MlmMemberDetail() {
               </h3>
               <div className="mt-2 flex flex-wrap items-center gap-2">
                 <MemberStatusBadge status={member.memberStatus} />
-                {member.referrerId && (
+                {(member.referrerUid ?? member.referrerId) && (
                   <span className="text-sm text-gray-500 dark:text-gray-400">
                     Sponsor:{" "}
                     <Link
-                      to={`/admin/mlm/members/${member.referrerId}`}
+                      to={`/admin/mlm/members/${member.referrerUid ?? member.referrerId}`}
                       className="font-mono text-brand-600 hover:underline dark:text-brand-400"
                     >
-                      {member.referrerId}
+                      {member.referrerUid ?? member.referrerId}
                     </Link>
                   </span>
                 )}
@@ -155,17 +155,35 @@ export default function MlmMemberDetail() {
             <InfoRow label="Email" value={member.email} />
             <InfoRow
               label="Phone"
-              value={
-                member.countryCode
-                  ? `${member.countryCode} ${member.phone ?? member.contactNo ?? ""}`
-                  : member.phone ?? member.contactNo
-              }
+              value={formatPhone(
+                member.phone,
+                member.countryCode,
+                member.contactNo
+              )}
+            />
+            <InfoRow
+              label="Email verified"
+              value={member.emailVerified ? "Yes" : "No"}
+            />
+            <InfoRow
+              label="Phone verified"
+              value={member.phoneVerified ? "Yes" : "No"}
+            />
+            <InfoRow
+              label="PAN verified"
+              value={member.panVerified ? "Yes" : "No"}
             />
             <InfoRow label="PAN" value={member.panNo} />
             <InfoRow
               label="Date of Joining"
               value={formatDateTime(member.dateOfJoining ?? member.createdAt)}
             />
+            {member.activatedAt && (
+              <InfoRow
+                label="Activated At"
+                value={formatDateTime(member.activatedAt)}
+              />
+            )}
           </SectionCard>
 
           <SectionCard title="Team Overview">

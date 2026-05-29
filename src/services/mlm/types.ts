@@ -21,9 +21,17 @@ export interface MlmMember {
   contactNo?: string;
   countryCode?: string;
   memberStatus?: MemberStatus;
+  referrerUid?: string | null;
+  /** @deprecated use referrerUid */
   referrerId?: string;
+  emailVerified?: boolean;
+  phoneVerified?: boolean;
+  panVerified?: boolean;
+  role?: string;
   dateOfJoining?: string;
   createdAt?: string;
+  updatedAt?: string;
+  activatedAt?: string;
   panNo?: string;
   wallet?: {
     availableBalance?: number;

@@ -10,7 +10,7 @@ import {
 import PageMeta from "../../../components/common/PageMeta";
 import MlmPageBreadCrumb from "./components/MlmPageBreadCrumb";
 import { mlmMemberApi, type MemberStatus, type MlmMember } from "../../../services/mlm";
-import { formatDate, unwrapList } from "./utils";
+import { formatDate, formatPhone, unwrapList } from "./utils";
 import { MemberStatusBadge } from "./components/StatusBadges";
 import { EyeIcon } from "../../../icons";
 
@@ -25,6 +25,7 @@ export default function MlmMembers() {
   const [search, setSearch] = useState("");
   const [searchInput, setSearchInput] = useState("");
   const [statusFilter, setStatusFilter] = useState<"" | MemberStatus>("");
+  const [totalPages, setTotalPages] = useState(1);
 
   const fetchMembers = useCallback(() => {
     setLoading(true);
@@ -37,17 +38,24 @@ export default function MlmMembers() {
       })
       .then((res) => {
         if (res.data.success) {
-          const { items: list, total: count } = unwrapList(res.data.data);
+          const {
+            items: list,
+            total: count,
+            totalPages: pages,
+          } = unwrapList(res.data.data);
           setItems(list);
           setTotal(count);
+          setTotalPages(pages ?? (Math.ceil(count / LIMIT) || 1));
         } else {
           setItems([]);
           setTotal(0);
+          setTotalPages(1);
         }
       })
       .catch(() => {
         setItems([]);
         setTotal(0);
+        setTotalPages(1);
       })
       .finally(() => setLoading(false));
   }, [page, search, statusFilter]);
@@ -61,8 +69,6 @@ export default function MlmMembers() {
     setPage(1);
     setSearch(searchInput.trim());
   };
-
-  const totalPages = Math.ceil(total / LIMIT) || 1;
 
   return (
     <>
@@ -191,7 +197,11 @@ export default function MlmMembers() {
                         {member.email ?? "—"}
                       </TableCell>
                       <TableCell className="px-4 py-2.5 align-middle text-gray-500 dark:text-gray-400">
-                        {member.phone ?? member.contactNo ?? "—"}
+                        {formatPhone(
+                          member.phone,
+                          member.countryCode,
+                          member.contactNo
+                        )}
                       </TableCell>
                       <TableCell className="px-4 py-2.5 align-middle">
                         <MemberStatusBadge status={member.memberStatus} />
