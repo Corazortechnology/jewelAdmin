@@ -33,6 +33,12 @@ import Inventory from "./pages/Admin/Inventory";
 import InventoryDetail from "./pages/Admin/InventoryDetail";
 import Variants from "./pages/Admin/Variants";
 import Reviews from "./pages/Admin/Reviews";
+import MlmDashboard from "./pages/Admin/mlm/Dashboard";
+import MlmMembers from "./pages/Admin/mlm/Members";
+import MlmMemberDetail from "./pages/Admin/mlm/MemberDetail";
+import MlmManualBv from "./pages/Admin/mlm/ManualBv";
+import MlmClosing from "./pages/Admin/mlm/Closing";
+import MlmWithdrawals from "./pages/Admin/mlm/Withdrawals";
 
 export default function App() {
   return (
@@ -82,6 +88,14 @@ export default function App() {
             <Route path="/admin/inventory/:id" element={<InventoryDetail />} />
             <Route path="/admin/variants" element={<Variants />} />
             <Route path="/admin/reviews" element={<Reviews />} />
+
+            {/* MLM Admin */}
+            <Route path="/admin/mlm" element={<MlmDashboard />} />
+            <Route path="/admin/mlm/members" element={<MlmMembers />} />
+            <Route path="/admin/mlm/members/:uid" element={<MlmMemberDetail />} />
+            <Route path="/admin/mlm/manual-bv" element={<MlmManualBv />} />
+            <Route path="/admin/mlm/closing" element={<MlmClosing />} />
+            <Route path="/admin/mlm/withdrawals" element={<MlmWithdrawals />} />
           </Route>
 
           {/* Auth Layout (public) */}

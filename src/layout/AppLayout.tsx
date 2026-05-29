@@ -1,4 +1,5 @@
 import { SidebarProvider, useSidebar } from "../context/SidebarContext";
+import { AdminModuleProvider } from "../context/AdminModuleContext";
 import { Outlet } from "react-router";
 import AppHeader from "./AppHeader";
 import Backdrop from "./Backdrop";
@@ -29,9 +30,11 @@ const LayoutContent: React.FC = () => {
 
 const AppLayout: React.FC = () => {
   return (
-    <SidebarProvider>
-      <LayoutContent />
-    </SidebarProvider>
+    <AdminModuleProvider>
+      <SidebarProvider>
+        <LayoutContent />
+      </SidebarProvider>
+    </AdminModuleProvider>
   );
 };
 
